@@ -1,0 +1,27 @@
+api_token: null
+labels_to_ignore:
+  - wontfix
+  - not-in-changelog
+  - invalid
+  - duplicate
+  - answered
+  - worksforme
+sort_by_labels:
+  - Critical
+  - Major
+  - 'c: New plugin'
+  - 'c: Security'
+  - Enhancement
+  - 'c: Performance'
+  - Regression
+  - 'c: Design / UI'
+  - 'c: Usability'
+  - 'c: Accessibility'
+  - Task
+  - 'c: Platform'
+  - Bug
+  - 'c: Website matomo.org'
+  - 'c: i18n'
+  - RFC
+
+is_matomo: True
