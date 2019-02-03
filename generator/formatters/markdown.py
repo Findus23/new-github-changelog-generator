@@ -9,7 +9,8 @@ class MarkdownFormatter(BaseFormatter):
         text = ""
         for repo in self.repos:
             if repo.issues:
-                text += "### [{}]({})\n".format(repo.path, repo.absolute_url)
+                if len(self.repos) > 1:
+                    text += "### [{}]({})\n".format(repo.path, repo.absolute_url)
                 for issue in repo.issues:
                     text += "  - [#{id}]({url}) {title}".format(
                         url=issue.url,

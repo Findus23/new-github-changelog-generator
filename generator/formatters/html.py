@@ -9,7 +9,8 @@ class HTMLFormatter(BaseFormatter):
         text = "<div>\n"
         for repo in self.repos:
             if repo.issues:
-                text += "<h3><a href='{}'>{}</a></h3>\n".format(repo.absolute_url, repo.path)
+                if len(self.repos) > 1:
+                    text += "<h3><a href='{}'>{}</a></h3>\n".format(repo.absolute_url, repo.path)
                 text += "<ul>\n"
                 for issue in repo.issues:
                     text += "\t<li><a href='{url}'>#{id}</a> {title}".format(

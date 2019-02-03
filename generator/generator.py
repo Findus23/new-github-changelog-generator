@@ -25,7 +25,7 @@ def generate_statistics(repos: List[Repo]):
     print("{num} Tickets closed by {contr} contributors".format(num=num_issues, contr=len(unique_authors)))
 
 
-def generate_changelog(since: datetime):
+def generate_changelog(since: datetime, output_format):
     repos = []
     for repo_url in config.repositories:
         repo = Repo(repo_url)
@@ -45,5 +45,10 @@ def generate_changelog(since: datetime):
         repo.issues = issues
         repos.append(repo)
 
-    print(HTMLFormatter(repos))
+    if output_format == "html":
+        print(HTMLFormatter(repos))
+    elif output_format == "markdown":
+        print(MarkdownFormatter(repos))
+    else:
+        raise ValueError()
     generate_statistics(repos)
