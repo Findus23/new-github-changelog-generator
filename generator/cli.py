@@ -24,6 +24,8 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--html', action='store_const', const="html", dest="output", help="output as HTML")
     group.add_argument('--markdown', action='store_const', const="markdown", dest="output", help="output as markdown")
+    group.add_argument('--debian-changelog', action='store_const', const="debianchangelog", dest="output",
+                       help="output as debian changelog file")
 
     args = parser.parse_args()
-    generate_changelog(args.since, args.output,args.previous_version)
+    generate_changelog(args.since, args.output, args.previous_version)

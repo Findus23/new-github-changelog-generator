@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 
 from generator import GithubAPI, config, Issue, Repo
-from generator.formatters import HTMLFormatter, MarkdownFormatter
+from generator.formatters import HTMLFormatter, MarkdownFormatter, DebianChangelogFormatter
 
 api = GithubAPI(token=config.api_token)
 
@@ -63,6 +63,8 @@ def generate_changelog(since: datetime, output_format, previous_version):
         print(HTMLFormatter(repos))
     elif output_format == "markdown":
         print(MarkdownFormatter(repos))
+    elif output_format == "debianchangelog":
+        print(DebianChangelogFormatter(repos))
     else:
         raise ValueError()
     generate_statistics(repos)
