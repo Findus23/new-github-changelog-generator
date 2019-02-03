@@ -1,10 +1,11 @@
 from datetime import date
+from typing import Iterable
 from urllib.parse import urlencode
 from warnings import warn
 
 import requests
 
-from generator.issue import Issue
+from generator import Event, Issue
 
 
 class GithubAPI:
@@ -21,6 +22,8 @@ class GithubAPI:
         if "//" not in url:
             url = self.BASE_URL + url
             print(url + "?" + urlencode(parameters))
+        else:
+            print(url)
         r = self.s.get(url, params=parameters)
         if isinstance(r.json(), dict):
             yield r.json()
@@ -31,7 +34,7 @@ class GithubAPI:
                 r = self.s.get(r.links["next"]["url"])
                 yield from r.json()
 
-    def fetch_issues_since(self, repo, since: date):
+    def fetch_issues_since(self, repo, since: date) -> Iterable[Issue]:
         assert "/" in repo  # e.g. "matomo-org/matomo"
         path = "/repos/{}/issues".format(repo)
         params = {
@@ -43,11 +46,12 @@ class GithubAPI:
         for response in responses:
             yield Issue(response)
 
-    def fetch_pr_details(self, pr: Issue):
-        print(pr.pr_url)
+    def fetch_pr_details(self, pr: Issue) -> dict:
         data = list(self.call(pr.pr_url))[
             0]  # self.call is a generator even if there is only one result
         return data
 
-    def fetch_events(self):
-        pass
+    def fetch_events(self, issue: Issue) -> Iterable[Event]:
+        responses = self.call(issue.events_url)
+        for response in responses:
+            yield Event(response)

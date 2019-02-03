@@ -17,12 +17,13 @@ class Config:
             if self.is_matomo:
                 self.compare_config()
 
-    def get_config_path(self):
+    def get_config_path(self) -> str:
         for path in self.config_paths:
             if os.path.isfile(path):
                 return path
+        raise Exception("no config file found")  # TODO
 
-    def compare_config(self):
+    def compare_config(self) -> None:
         used_config = self.__dict__
         default_config_file = pkg_resources.resource_filename('generator', 'defaultconfig.yaml')
 

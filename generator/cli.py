@@ -1,5 +1,9 @@
-from generator.generator import generate_changelog
+from datetime import datetime, timedelta
+
+from generator import generate_changelog
 
 
 def main():
-    generate_changelog()
+    since = datetime.today() - timedelta(10)
+
+    generate_changelog(since)
