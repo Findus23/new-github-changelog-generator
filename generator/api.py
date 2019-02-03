@@ -17,6 +17,7 @@ class GithubAPI:
             self.s.headers.update({'Authorization': 'token {}'.format(token)})
         else:
             warn("use Token!", stacklevel=2)  # TODO
+        self.s.headers.update({'User-Agent': 'github-changelog-generator'})
 
     def call(self, url, parameters=None):
         if "//" not in url:

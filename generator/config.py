@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 import pkg_resources
 import yaml
@@ -9,13 +10,17 @@ class Config:
 
     def __init__(self):
         with open(self.get_config_path(), 'r') as stream:
-            config = yaml.safe_load(stream)
-            self.api_token = config["api_token"]  # type:str
-            self.labels_to_ignore = set(config["labels_to_ignore"])
-            self.sort_by_labels = config["sort_by_labels"]
-            self.is_matomo = config["is_matomo"]  # type:bool
-            if self.is_matomo:
-                self.compare_config()
+            try:
+                config = yaml.safe_load(stream)
+                self.api_token = config["api_token"]  # type:str
+                self.labels_to_ignore = set(config["labels_to_ignore"])
+                self.sort_by_labels = config["sort_by_labels"]  # type:list
+                self.repositories = config["repositories"]  # type:list
+                self.is_matomo = config["is_matomo"]  # type:bool
+                if self.is_matomo:
+                    self.compare_config()
+            except KeyError as e:
+                sys.exit("required option '{}' is missing from the config".format(e.args[0]))
 
     def get_config_path(self) -> str:
         for path in self.config_paths:

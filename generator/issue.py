@@ -8,7 +8,7 @@ class Issue():
     def __init__(self, api):
         self.number = api["number"]  # type:int
         self.title = api["title"]  # type:str
-        self.url = api["url"]  # type:str
+        self.url = api["html_url"]  # type:str
         self.labels = [l["name"] for l in api["labels"]]  # type:List[str]
         self.closed_at = datetime.strptime(api["closed_at"], "%Y-%m-%dT%H:%M:%SZ")
         self.pull_request = "pull_request" in api
@@ -20,7 +20,8 @@ class Issue():
         self.merged = None  # type:bool
         self.authors = set()  # type:set
         self.creator = Author(api["user"])
-        self.authors.add(self.creator)
+        if self.pull_request:
+            self.authors.add(self.creator)
 
     def __repr__(self):
         return "<Issue #{}>".format(self.number)

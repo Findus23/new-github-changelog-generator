@@ -4,6 +4,6 @@ from generator import generate_changelog
 
 
 def main():
-    since = datetime.today() - timedelta(10)
+    since = datetime.today() - timedelta(5)
 
     generate_changelog(since)

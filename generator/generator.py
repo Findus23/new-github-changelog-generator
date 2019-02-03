@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import List
 
-from generator import GithubAPI, config, Issue
-from generator.formatters import MarkdownFormatter
+from generator import GithubAPI, config, Issue, Repo
+from generator.formatters import HTMLFormatter, MarkdownFormatter
 
 api = GithubAPI(token=config.api_token)
 
@@ -14,18 +15,35 @@ def getissueorder(issue: Issue):
     return order, issue.number
 
 
-def generate_changelog(since: datetime):
-    issues = api.fetch_issues_since("matomo-org/matomo", since)
-    issues = list(issues)  # enumerate iterable
-    for issue in issues:
-        if issue.pull_request:
-            issue.add_pr_data(api.fetch_pr_details(issue))
-        issue.compare_close_date(since)
-    issues = [i for i in issues if i.should_be_included]  # remove all filtered issues
-    for issue in issues:
-        for event in api.fetch_events(issue):
-            if event.author_should_be_listed:
-                issue.authors.add(event.author)
+def generate_statistics(repos: List[Repo]):
+    unique_authors = set()
+    num_issues = 0
+    for repo in repos:
+        for issue in repo.issues:
+            num_issues += 1
+            unique_authors.update(issue.authors)
+    print("{num} Tickets closed by {contr} contributors".format(num=num_issues, contr=len(unique_authors)))
 
-    issues.sort(key=getissueorder)
-    print(MarkdownFormatter(issues))
+
+def generate_changelog(since: datetime):
+    repos = []
+    for repo_url in config.repositories:
+        repo = Repo(repo_url)
+        issues = api.fetch_issues_since(repo_url, since)
+        issues = list(issues)  # enumerate iterable
+        for issue in issues:
+            if issue.pull_request:
+                issue.add_pr_data(api.fetch_pr_details(issue))
+            issue.compare_close_date(since)
+        issues = [i for i in issues if i.should_be_included]  # remove all filtered issues
+        for issue in issues:
+            for event in api.fetch_events(issue):
+                if event.author_should_be_listed:
+                    issue.authors.add(event.author)
+
+        issues.sort(key=getissueorder)
+        repo.issues = issues
+        repos.append(repo)
+
+    print(HTMLFormatter(repos))
+    generate_statistics(repos)

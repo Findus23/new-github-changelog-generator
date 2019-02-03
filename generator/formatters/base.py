@@ -1,11 +1,11 @@
 from typing import List
 
-from generator import Issue
+from generator import Repo
 
 
 class BaseFormatter:
-    def __init__(self, issues: List[Issue]):
-        self.issues = issues
+    def __init__(self, repos: List[Repo]):
+        self.repos = repos
 
     def __str__(self) -> str:
         return ""

@@ -7,20 +7,23 @@ class MarkdownFormatter(BaseFormatter):
 
     def __str__(self) -> str:
         text = ""
-        for issue in self.issues:
-            text += "\t- [#{id}]({url}) {title}".format(
-                url=issue.url,
-                id=issue.number,
-                title=html.escape(issue.title)
-            )
-            if issue.authors:
-                text += " [by {}]".format(
-                    ", ".join(
-                        "[@{name}]({url})".format(
-                            url=author.profile_url,
-                            name=html.escape(author.username)
-                        ) for author in issue.authors
+        for repo in self.repos:
+            if repo.issues:
+                text += "### [{}]({})\n".format(repo.path, repo.absolute_url)
+                for issue in repo.issues:
+                    text += "  - [#{id}]({url}) {title}".format(
+                        url=issue.url,
+                        id=issue.number,
+                        title=html.escape(issue.title)
                     )
-                )
-            text += "\n"
+                    if issue.authors:
+                        text += " [by {}]".format(
+                            ", ".join(
+                                "[@{name}]({url})".format(
+                                    url=author.profile_url,
+                                    name=html.escape(author.username)
+                                ) for author in issue.authors
+                            )
+                        )
+                    text += "\n"
         return text
