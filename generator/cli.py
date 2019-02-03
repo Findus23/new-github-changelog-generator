@@ -16,13 +16,14 @@ def main():
     since = datetime.today() - timedelta(5)
 
     parser = argparse.ArgumentParser(description='Generate changelogs from closed GitHub issues and merged PRs.')
-    parser.add_argument('--since', metavar='"YYYY-MM-DD HH:MM:SS"', type=parsed_date,
-                        help='date of previous release')
-    parser.add_argument('--output', metavar='"YYYY-MM-DD HH:MM:SS"', type=parsed_date,
-                        help='date of previous release')
+    sincegroup = parser.add_mutually_exclusive_group()
+
+    sincegroup.add_argument('--since', metavar='"YYYY-MM-DD HH:MM:SS"', type=parsed_date,
+                            help='date of previous release')
+    sincegroup.add_argument('--previous-version', type=str)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--html', action='store_const', const="html", dest="output", help="output as HTML")
     group.add_argument('--markdown', action='store_const', const="markdown", dest="output", help="output as markdown")
 
     args = parser.parse_args()
-    generate_changelog(args.since, args.output)
+    generate_changelog(args.since, args.output,args.previous_version)

@@ -56,3 +56,8 @@ class GithubAPI:
         responses = self.call(issue.events_url)
         for response in responses:
             yield Event(response)
+
+    def get_stable_releases(self, repo):
+        url = self.BASE_URL + "/repos/{}/releases".format(repo)
+        r = self.s.get(url)
+        return [rel for rel in r.json() if not rel["prerelease"]]

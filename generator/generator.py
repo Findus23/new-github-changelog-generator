@@ -25,7 +25,21 @@ def generate_statistics(repos: List[Repo]):
     print("{num} Tickets closed by {contr} contributors".format(num=num_issues, contr=len(unique_authors)))
 
 
-def generate_changelog(since: datetime, output_format):
+def generate_changelog(since: datetime, output_format, previous_version):
+    if not since:
+        releases = api.get_stable_releases(config.repositories[0])
+        if previous_version:
+            version = [rel for rel in releases if rel["tag_name"] == previous_version]
+            if not version:
+                raise ValueError("version '{}' could not be found".format(previous_version))
+            version = version[0]
+        else:
+            version = releases[0]
+
+        since = datetime.strptime(version["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+        print("searching for issues since '{}' released on {}".format(version["tag_name"], since))
+    else:
+        print("searching for issues since {}".format(since))
     repos = []
     for repo_url in config.repositories:
         repo = Repo(repo_url)
