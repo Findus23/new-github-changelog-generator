@@ -31,7 +31,7 @@ def initfile(globally: bool):
 
 def main():
     parser = argparse.ArgumentParser(description='Generate changelogs from closed GitHub issues and merged PRs.')
-    subparsers = parser.add_subparsers(dest="command")
+    subparsers = parser.add_subparsers(dest="command",required=True)
 
     init = subparsers.add_parser("init")
     init.add_argument("--global", dest="globally", action='store_true', help="store config file in ~/.config/")
