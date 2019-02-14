@@ -9,5 +9,9 @@ setup(
     entry_points={
         'console_scripts': ['github-changelog-generator=generator.cli:main'],
     },
-    long_description=open('README.md').read()
+    long_description=open('README.md').read(),
+    install_requires=[
+        'requests',
+        'PyYAML'
+    ],
 )
