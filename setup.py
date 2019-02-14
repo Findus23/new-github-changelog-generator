@@ -14,4 +14,5 @@ setup(
         'requests',
         'PyYAML'
     ],
+    include_package_data=True
 )
