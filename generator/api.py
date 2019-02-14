@@ -1,7 +1,6 @@
 from datetime import date
 from typing import Iterable
 from urllib.parse import urlencode
-from warnings import warn
 
 import requests
 
@@ -16,7 +15,7 @@ class GithubAPI:
         if token:
             self.s.headers.update({'Authorization': 'token {}'.format(token)})
         else:
-            warn("use Token!", stacklevel=2)  # TODO
+            print("warning: please add a GitHub token_auth to the config file to avoid rate limits!")
         self.s.headers.update({'User-Agent': 'github-changelog-generator'})
 
     def call(self, url, parameters=None):

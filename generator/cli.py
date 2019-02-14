@@ -7,7 +7,7 @@ from shutil import copyfile
 
 import pkg_resources
 
-from generator import generate_changelog
+from generator import generate_changelog, config
 
 
 def parsed_date(s):
@@ -49,11 +49,13 @@ def main():
                        help="output as debian changelog file")
 
     args = parser.parse_args()
-    print(args)
 
     if args.command == "init":
         initfile(args.globally)
     elif args.command == "generate":
+        if config.api_token == "none_found":
+            sys.exit("no config file found\nPlease create one by running\n"
+                     "github-changelog-generator init")
         generate_changelog(args.since, args.output, args.previous_version)
     else:
         raise ValueError("invalid subcommand")
