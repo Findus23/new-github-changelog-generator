@@ -1,4 +1,4 @@
-api_token: null
+api_token: null #  replace 'null' with a proper token from https://github.com/settings/tokens to avoid rate limiting issues.
 repositories:
   - matomo-org/matomo
   - matomo-org/tag-manager
@@ -39,4 +39,4 @@ sort_by_labels:
   - 'c: i18n'
   - RFC
 
-is_matomo: True
+is_matomo: True #  set to False if you don't want to generate changelogs for the Matomo project
